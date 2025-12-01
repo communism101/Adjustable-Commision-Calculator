@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Commission Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 550px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f7f7f7;
+      border-radius: 10px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 12px;
+      font-size: 16px;
+    }
+    button {
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+      margin-top: 18px;
+    }
+    #calcBtn {
+      background: #007bff;
+      color: white;
+    }
+    #calcBtn:hover { background: #0056b3; }
+
+    #resetBtn {
+      background: #6c757d;
+      color: white;
+    }
+    #resetBtn:hover { background: #5a6268; }
+
+    .slider-value {
+      font-weight: bold;
+      font-size: 18px;
+      text-align: center;
+      margin-top: 5px;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Commission Calculator</h2>
+
+  <label>Premium Amount ($)</label>
+  <input type="number" id="premium" placeholder="Enter premium" />
+
+  <label>Commission Percentage</label>
+  <input type="range" id="commissionPct" min="0" max="100" value="25" step="1"
+         oninput="updatePctDisplay()" />
+  <div class="slider-value">
+    Commission: <span id="pctDisplay">25</span>%
+  </div>
+
+  <label>
+    <input type="checkbox" id="addADnD" />
+    Add AD&D (+$20)
+  </label>
+
+  <button id="calcBtn" onclick="calculateCommission()">Calculate Commission</button>
+  <button id="resetBtn" onclick="resetForm()">Reset</button>
+
+  <div class="result" id="output"></div>
+
+<script>
+  function updatePctDisplay() {
+    document.getElementById("pctDisplay").textContent =
+      document.getElementById("commissionPct").value;
+  }
+
+  function calculateCommission() {
+    let premium = parseFloat(document.getElementById("premium").value);
+    let pct = parseFloat(document.getElementById("commissionPct").value) / 100;
+
+    if (isNaN(premium) || premium < 25) {
+      document.getElementById("output").innerHTML =
+        "Please enter a premium greater than $25.";
+      return;
+    }
+
+    let adjusted = premium - 25;
+    let commission = adjusted * pct;
+
+    if (document.getElementById("addADnD").checked) {
+      commission += 20;
+    }
+
+    document.getElementById("output").innerHTML =
+      `Commission: <strong>$${commission.toFixed(2)}</strong>`;
+  }
+
+  function resetForm() {
+    document.getElementById("premium").value = "";
+    document.getElementById("commissionPct").value = 25;
+    document.getElementById("pctDisplay").textContent = 25;
+    document.getElementById("addADnD").checked = false;
+    document.getElementById("output").innerHTML = "";
+  }
+</script>
+
+</body>
+</html>
